@@ -1,4 +1,7 @@
 using BSON
+using DSP
+using Images
+using Plots
 
 function LoadModelData(path)
     model_dict = BSON.load(path)
@@ -50,4 +53,29 @@ end
 function PlotConfusionMatrix(R, assignment_list)
     gr()
     heatmap(assignment_list, assignment_list, R, size = (700, 500), xrotation = 45)
+end
+
+function get_filters(model, layer)
+    x, _ = params(model[layer])
+    x = dropdims(x, dims = 3)
+    return x
+end
+
+function visualize_filters(model, layer)
+    x = get_filters(model, layer)
+    plots = []
+    for i in 1:16
+       push!(plots, plot(Gray.(x[:,:,i])))
+       end
+    plot(plots[:]..., layout = (4,4))
+end
+
+function visualize_layers(model, layer, test_image)
+    x = get_filters(model, layer)
+    plots = []
+    for i in 1:size(x)[3]
+        convolution = DSP.conv(test_image, x[:,:,i])
+        push!(plots, plot(Gray.(convolution)))
+    end
+    plot(plots[:]..., layout = (16, 1))
 end

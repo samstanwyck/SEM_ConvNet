@@ -17,7 +17,7 @@ function train_test_split(images, labels, ratio::Float64)
     return train_images, train_labels, test_images, test_labels
     end
 
-function create_training_and_test_data(path::String, label::Int64, ratio::Float64 = 0.9, max_group_size::Int64 = 500)
+function create_training_and_test_data(path::String, label::Int64, ratio::Float64 = 0.9, max_group_size::Int64 = 100)
     images = []
     labels = Array{Int64}(undef, 0)
     files = readdir(path)
@@ -30,7 +30,7 @@ function create_training_and_test_data(path::String, label::Int64, ratio::Float6
         if size(img) == (768, 1024)
             push!(labels, label)
             gray_img = Gray.(img)
-            gray_img_cropped = gray_img[1:768,1:768]
+            gray_img_cropped = gray_img[1:512,1:512]
             push!(images, gray_img_cropped)
         end
     end
@@ -39,7 +39,7 @@ function create_training_and_test_data(path::String, label::Int64, ratio::Float6
 
     end
 
-function load_all(path::String, ratio::Float64 = 0.9, max_group_size::Int64 = 500)
+function load_all(path::String, ratio::Float64 = 0.9, max_group_size::Int64 = 100)
     label = 0
     train_images = []
     train_labels = Array{Int64}(undef, 0)

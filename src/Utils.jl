@@ -24,6 +24,7 @@ function make_minibatches(train_images, train_labels, test_images, test_labels, 
         mb_idxs = partition(1:length(train_images), batch_size)
         train_set = [make_minibatch(train_images, train_labels, i) for i in mb_idxs]
         test_set = make_minibatch(test_images, test_labels, 1:length(test_images))
+
         return train_set, test_set
 end
 
